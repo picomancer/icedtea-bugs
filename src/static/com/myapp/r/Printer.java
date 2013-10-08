@@ -1,11 +1,15 @@
 
 package com.myapp.r;
 
+import java.io.PrintStream;
+
 public class Printer
 {
+    public static PrintStream out;
+
     public static void print(String message)
     {
-        System.out.println(message);
+        out.println(message);
         return;
     }
 }

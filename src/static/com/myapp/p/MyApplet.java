@@ -1,10 +1,13 @@
 
 package com.myapp.p;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.swing.JApplet;
 import javax.swing.SwingUtilities;
+import com.myapp.r.Printer;
 
 public class MyApplet
     extends JApplet
@@ -33,6 +36,8 @@ public class MyApplet
 
     public void _init()
     {
+        ByteArrayOutputStream my_output = new ByteArrayOutputStream();
+        Printer.out = new PrintStream(my_output);
         try
         {
             System.err.println("Attempting to run class");
@@ -63,6 +68,13 @@ public class MyApplet
         {
             e.printStackTrace(System.err);
         }
+
+        Printer.out.flush();
+        System.err.println("Printed:  "+new String(my_output.toByteArray()));
+
+        //
+        // TODO:  Extract stuff from ByteArrayOutputStream and display it in a Swing component
+        //
         return;
     }
 }

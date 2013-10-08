@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cpbug" default="default">
+   <!-- Default target -->
+   <target name="default" depends="www" />
+
+   <target name="compile_static">
+      <mkdir dir="gen/static/class" />
+      <javac debug="true" destdir="gen/static/class" includeantruntime="false">
+         <src path="src/static" />
+      </javac>
+   </target>
+
+   <target name="jar_static" depends="compile_static">
+      <jar jarfile="gen/static/jar/myapp-static.jar">
+         <fileset dir="gen/static/class" />
+      </jar>
+   </target>
+
+   <target name="compile_dynamic" depends="jar_static">
+      <mkdir dir="gen/dynamic/class" />
+      <javac debug="true" destdir="gen/dynamic/class" includeantruntime="false">
+         <src path="src/dynamic" />
+         <classpath>
+            <pathelement location="gen/static/jar/myapp-static.jar" />
+         </classpath>
+      </javac>
+   </target>
+
+   <target name="www" depends="jar_static,compile_dynamic">
+      <copy todir="dist/www/run">
+         <fileset dir="gen/static/jar" />
+         <fileset dir="gen/dynamic/class" />
+      </copy>
+      <copy todir="dist/www">
+         <fileset dir="src/html" />
+      </copy>
+   </target>
+
+   <target name="clean">
+      <delete dir="dist" />
+      <delete dir="gen" />
+   </target>
+</project>
